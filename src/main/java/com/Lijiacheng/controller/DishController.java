@@ -9,13 +9,13 @@ import com.Lijiacheng.service.CategoryService;
 import com.Lijiacheng.service.DishFlavorService;
 import com.Lijiacheng.service.DishService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -179,5 +179,42 @@ public class DishController {
 
         return Result.success(dishDtoList);
     }
+
+
+    /**
+     * 菜品的（批量）起售停售
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public Result<String> changeStatus(@PathVariable Integer status, @RequestParam("ids") Long[] id){
+//        log.info("status --> {}", status);
+//        log.info("ids --> {}", id);
+
+        LambdaUpdateWrapper<Dish> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.in(Dish::getId, id);
+        lambdaUpdateWrapper.set(Dish::getStatus, status);
+        dishService.update(lambdaUpdateWrapper);
+
+        return Result.success("状态更改成功");
+    }
+
+    /**
+     * 删除菜品
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public Result<String> delete(Long[] ids){
+
+        LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Dish::getId, ids);
+        dishService.remove(lambdaQueryWrapper);
+
+        return Result.success("删除成功");
+    }
+
+
 
 }
