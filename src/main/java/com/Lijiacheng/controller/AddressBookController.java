@@ -3,6 +3,7 @@ package com.Lijiacheng.controller;
 import com.Lijiacheng.common.BaseContext;
 import com.Lijiacheng.common.Result;
 import com.Lijiacheng.domain.AddressBook;
+import com.Lijiacheng.domain.Setmeal;
 import com.Lijiacheng.service.AddressBookService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -37,7 +38,7 @@ public class AddressBookController {
     /**
      * 设置默认地址
      */
-    @PutMapping("default")
+    @PutMapping("/default")
     public Result<AddressBook> setDefault(@RequestBody AddressBook addressBook) {
         log.info("addressBook:{}", addressBook);
         LambdaUpdateWrapper<AddressBook> wrapper = new LambdaUpdateWrapper<>();
@@ -68,7 +69,7 @@ public class AddressBookController {
     /**
      * 查询默认地址
      */
-    @GetMapping("default")
+    @GetMapping("/default")
     public Result<AddressBook> getDefault() {
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AddressBook::getUserId, BaseContext.getCurrentId());
@@ -88,9 +89,9 @@ public class AddressBookController {
      * 查询指定用户的全部地址
      */
     @GetMapping("/list")
-    public Result<List<AddressBook>> list(AddressBook addressBook) {
+    public Result<List<AddressBook>> list() {
+        AddressBook addressBook = new AddressBook();
         addressBook.setUserId(BaseContext.getCurrentId());
-        log.info("addressBook:{}", addressBook);
 
         //条件构造器
         LambdaQueryWrapper<AddressBook> queryWrapper = new LambdaQueryWrapper<>();
@@ -99,5 +100,11 @@ public class AddressBookController {
 
         //SQL:select * from address_book where user_id = ? order by update_time desc
         return Result.success(addressBookService.list(queryWrapper));
+    }
+
+    @PutMapping
+    public Result<String> editAddress(@RequestBody AddressBook addressBook){
+        addressBookService.updateById(addressBook);
+        return Result.success("地址修改成功");
     }
 }

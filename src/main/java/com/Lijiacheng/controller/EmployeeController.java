@@ -1,6 +1,5 @@
 package com.Lijiacheng.controller;
 
-import com.Lijiacheng.common.BaseContext;
 import com.Lijiacheng.common.Result;
 import com.Lijiacheng.domain.Employee;
 import com.Lijiacheng.service.EmployeeService;
@@ -14,7 +13,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -79,7 +77,7 @@ public class EmployeeController {
      */
     @PostMapping
     public Result<String> save(HttpServletRequest request, @RequestBody Employee employee){
-        // 设置初始密码为123456
+        // 设置默认的初始密码为123456
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
 
 /*
@@ -105,7 +103,7 @@ public class EmployeeController {
 //        log.info("page: {}, pageSize: {}, name: {}", page, pageSize, name);
 
         // 构造分页构造器
-        IPage pageInfo = new Page(page, pageSize);
+        Page<Employee> pageInfo = new Page<>(page, pageSize);
 
         // 构造条件构造器
         LambdaQueryWrapper<Employee> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -118,14 +116,14 @@ public class EmployeeController {
         // 执行查询
 //        pageInfo = employeeService.page(pageInfo, lambdaQueryWrapper);
         employeeService.page(pageInfo, lambdaQueryWrapper);  // 都可以，因为IService的page函数会将查询数据自动封装到page当中
-        return Result.success((Page)pageInfo);
+        return Result.success(pageInfo);
     }
 
     /**
      * 根据id修改员工信息
      * */
     @PutMapping
-    public Result<String> update(HttpServletRequest request, @RequestBody Employee employee){
+    public Result<String> update(@RequestBody Employee employee){
 //        log.info(employee.toString());
 
 /*

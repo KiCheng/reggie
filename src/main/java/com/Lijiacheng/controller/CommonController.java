@@ -29,7 +29,7 @@ public class CommonController {
     /**
      * 文件上传
      * */
-    @RequestMapping("/upload")
+    @PostMapping("/upload")
     // 请求参数名是Form-Data的name值
     public Result<String> upload(MultipartFile file) throws IOException {
         log.info(file.toString());

@@ -36,5 +36,4 @@ public class SMSUtils {
 			e.printStackTrace();
 		}
 	}
-
 }

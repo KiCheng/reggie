@@ -136,21 +136,6 @@ public class DishController {
      * @param dish
      * @return
      */
-    /*
-    @GetMapping("/list")
-    public Result<List<Dish>> list(Dish dish){
-        LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        Long categoryId = dish.getCategoryId();
-
-        lambdaQueryWrapper.eq(categoryId != null, Dish::getCategoryId, categoryId);
-        lambdaQueryWrapper.eq(Dish::getStatus, 1);  // 状态是"起售"的菜品
-        lambdaQueryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getCategoryId);
-
-        List<Dish> dishList = dishService.list(lambdaQueryWrapper);
-
-        return Result.success(dishList);
-    }
-     */
     @GetMapping("/list")
     public Result<List<DishDto>> list(Dish dish){
         LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();

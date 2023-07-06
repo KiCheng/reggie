@@ -21,4 +21,4 @@ mybatis-plus:
 
 # 自定义下载上传图片的路径配置
 reggie:
-  path: /Users/NUC/git/SSM/reggie_take_out/src/main/resources/picture/
+  path: /Users/NUC/git/reggie_take_out/src/main/resources/picture/

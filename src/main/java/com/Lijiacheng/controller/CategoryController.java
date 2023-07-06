@@ -31,7 +31,6 @@ public class CategoryController {
      * */
     @GetMapping("/page")
     public Result<Page> pageSelect(Integer page, Integer pageSize){
-//        Page pageInfo = new Page(page, pageSize);
         Page<Category> pageInfo = new Page<>(page, pageSize);
 
         // 构建条件构造器

@@ -31,7 +31,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         int count1 = (int) dishService.count(dishLambdaQueryWrapper);  // select count(*) from dish where categoryId = ?
         if(count1 > 0){
             // 关联了菜品，无法在分类管理中删除，抛出一个业务异常
-//            log.error("关联了菜品，无法在分类管理中删除，抛出一个业务异常");
             throw new ServiceException("当前分类项关联了菜品，无法删除");
         }
 

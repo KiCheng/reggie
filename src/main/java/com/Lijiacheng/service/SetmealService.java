@@ -10,4 +10,8 @@ public interface SetmealService extends IService<Setmeal> {
     public void saveWithDish(SetmealDto setmealDto);
 
     public void removeWithDish(List<Long> ids);
+
+    public SetmealDto displaySetmealById(Long id);
+
+    void updateSetmeal(SetmealDto setmealDto);
 }

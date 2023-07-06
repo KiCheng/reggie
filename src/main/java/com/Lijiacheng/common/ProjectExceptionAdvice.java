@@ -31,7 +31,7 @@ public class ProjectExceptionAdvice {
      * 异常处理方法
      * */
     @ExceptionHandler(ServiceException.class)
-    public Result<String> doSqlException(ServiceException ex){
+    public Result<String> doServiceException(ServiceException ex){
         log.info(ex.getMessage());
         return Result.error(ex.getMessage());
     }

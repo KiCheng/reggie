@@ -80,9 +80,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
-//        log.info("用户未登录");
         response.getWriter().write(JSON.toJSONString(Result.error("NOTLOGIN")));
-
+//        log.info("用户未登录");
     }
 
     /**

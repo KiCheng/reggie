@@ -8,6 +8,7 @@ import com.Lijiacheng.service.DishFlavorService;
 import com.Lijiacheng.service.DishService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @Transactional
 public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements DishService {
 
@@ -29,8 +31,12 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      */
     @Override
     public void saveWithFlavor(DishDto dishDto) {
+        log.error("执行save前dishDto的id --> {}", dishDto.getId());
+
         // 保存菜品的基本信息到菜品表dish
         this.save(dishDto);
+
+        log.error("执行save后dishDto的id --> {}", dishDto.getId());
 
         // 保存菜品口味数据到菜品口味表dish_flavor，要注意dish_id无法通过dto对象赋值
         List<DishFlavor> flavors = dishDto.getFlavors();

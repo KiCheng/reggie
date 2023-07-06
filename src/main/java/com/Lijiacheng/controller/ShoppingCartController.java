@@ -33,7 +33,7 @@ public class ShoppingCartController {
 
         Long dishId = shoppingCart.getDishId();
         // 菜品和套餐的区别是发送的请求参数一个是dishId一个是setmealId
-        // SQL: select * from shopping_cart where user_id = ? and dish_id = ? (setmeal_id = ?)
+        // SQL: select * from shopping_cart where user_id = ? and [dish_id = ? 或者 setmeal_id = ?]
         LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(ShoppingCart::getUserId, currentId);
         if(dishId == null){
@@ -60,9 +60,41 @@ public class ShoppingCartController {
             shoppingCartOne.setNumber(++number);
             shoppingCartService.updateById(shoppingCartOne);
         }
-
         return Result.success(shoppingCartOne);
     }
+
+    /**
+     * 向购物车中减少菜品或套餐
+     * @param shoppingCart
+     * @return
+     */
+    @RequestMapping("/sub")
+    public Result<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart){
+        Long userId = BaseContext.getCurrentId();
+        shoppingCart.setUserId(userId);
+
+        // 实际请求参数只有dishId或者setmealId
+        LambdaQueryWrapper<ShoppingCart> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(ShoppingCart::getUserId, userId);
+        if(shoppingCart.getDishId() != null){
+            // 菜品
+            lambdaQueryWrapper.eq(ShoppingCart::getDishId, shoppingCart.getDishId());
+        } else{
+            // 套餐
+            lambdaQueryWrapper.eq(ShoppingCart::getSetmealId, shoppingCart.getSetmealId());
+        }
+        ShoppingCart one = shoppingCartService.getOne(lambdaQueryWrapper);
+
+        if(one.getNumber() == 1){
+            shoppingCartService.remove(lambdaQueryWrapper);
+        } else if(one.getNumber() > 1){
+            one.setNumber(one.getNumber() - 1);
+            shoppingCartService.updateById(one);
+        }
+        return Result.success(one);
+    }
+
+
 
     /**
      * 根据登录用户的id查询购物车的列表清单
